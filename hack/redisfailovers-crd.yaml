@@ -1,0 +1,36 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: redisfailovers.databases.spotahome.com
+spec:
+  conversion:
+    strategy: None
+  group: databases.spotahome.com
+  names:
+    categories:
+    - all
+    - kooper
+    kind: RedisFailover
+    listKind: RedisFailoverList
+    plural: redisfailovers
+    singular: redisfailover
+  scope: Namespaced
+  versions:
+  - name: v1
+    served: true
+    storage: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          status:
+            type: object
+          spec:
+            type: object
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: null
+  storedVersions:
+  - v1

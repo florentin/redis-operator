@@ -155,3 +155,20 @@ endif
 update-codegen: docker-build
 	@echo ">> Generating code for Kubernetes CRD types..."
 	docker run --rm -v $(PWD):/go/src/github.com/spotahome/redis-operator/ $(REPOSITORY)-dev /bin/bash -c '$(UPDATE_CODEGEN_CMD)'
+
+.PHONY: install-crd
+install-crd:
+	kubectl apply -f ./hack/redisfailovers-crd.yaml
+
+.PHONY: delete-crd
+delete-crd:
+	kubectl delete crd redisfailovers.databases.spotahome.com
+
+.PHONY: install-example
+install-example:
+	kubectl apply -f example/redisfailover/basic.yaml
+
+
+.PHONY: view-example
+view-example:
+	kubectl get redisfailovers redisfailover -o yaml
