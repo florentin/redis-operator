@@ -229,3 +229,17 @@ kubectl delete redisfailover <NAME>
 For the code documentation, you can lookup on the [GoDoc](https://godoc.org/github.com/spotahome/redis-operator).
 
 Also, you can check more deeply information on the [docs folder](docs).
+
+## EDITS
+Build and run locally with namespace support:
+
+```
+export CGO_ENABLED=0
+
+make install-crd
+kubectl config set-context $(kubectl config current-context) --namespace=ns-personal-sardan # replace with your own namespace
+make install-example
+# now you should see a "redisfailover.databases.spotahome.com/redisfailover" object in the namespace specified before (i.e. ns-personal-sardan)
+
+go build -ldflags '-extldflags "-static"' -a -v -o bin/darwin/redis-operator ./cmd/redisoperator/
+./bin/darwin/redis-operator -kubeconfig /Users/sardan/.kube/config -development -debug -namespace ns-personal-sardan
