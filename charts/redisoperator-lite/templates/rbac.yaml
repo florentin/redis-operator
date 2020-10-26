@@ -21,25 +21,28 @@ rules:
       - redisfailovers
       - redisfailovers/finalizers
     verbs:
-      - create
-      - delete
-      - get
-      - list
-      - patch
-      - update
-      - watch
-  - apiGroups:
-      - apiextensions.k8s.io
-    resources:
-      - customresourcedefinitions
-    verbs:
-      - create
-      - delete
-      - get
-      - list
-      - patch
-      - update
-      - watch
+      - "*"
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/{{ .Values.rbac.apiVersion }}
+metadata:
+  name: {{ include "name" . | quote }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "name" . | quote }}
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ include "name" . | quote }}
+---
+apiVersion: rbac.authorization.k8s.io/{{ .Values.rbac.apiVersion }}
+kind: Role
+metadata:
+  name: {{ include "name" . | quote }}
+  labels:
+{{ include "common-labels" . | indent 4 }}
+rules:
   - apiGroups:
       - ""
     resources:
@@ -88,7 +91,7 @@ rules:
       - update
       - watch
 ---
-kind: ClusterRoleBinding
+kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/{{ .Values.rbac.apiVersion }}
 metadata:
   name: {{ include "name" . | quote }}
@@ -98,6 +101,6 @@ subjects:
     namespace: {{ .Release.Namespace }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
+  kind: Role
   name: {{ include "name" . | quote }}
 {{ end }}

@@ -43,13 +43,10 @@ replace k8s.io/cri-api => k8s.io/cri-api v0.0.0-20190817025403-3ae76f584e79
 replace k8s.io/code-generator => k8s.io/code-generator v0.0.0-20190612205613-18da4a14b22b
 
 require (
-	github.com/evanphx/json-patch v4.5.0+incompatible // indirect
 	github.com/go-redis/redis v6.12.0+incompatible
 	github.com/google/go-cmp v0.3.1 // indirect
 	github.com/google/uuid v1.1.1 // indirect
-	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/pkg/errors v0.8.1 // indirect
-	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/prometheus/client_golang v1.1.0
 	github.com/sirupsen/logrus v1.2.0
 	github.com/spotahome/kooper v0.8.0
@@ -58,7 +55,4 @@ require (
 	k8s.io/apiextensions-apiserver v0.0.0
 	k8s.io/apimachinery v0.15.10-beta.0
 	k8s.io/client-go v0.0.0
-	k8s.io/klog v1.0.0 // indirect
-	k8s.io/utils v0.0.0-20191114200735-6ca3b61696b6 // indirect
-	sigs.k8s.io/yaml v1.1.0 // indirect
 )

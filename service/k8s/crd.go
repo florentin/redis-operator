@@ -34,5 +34,7 @@ func NewCRDService(aeClient apiextensionscli.Interface, logger log.Logger) *CRDS
 
 // EnsureCRD satisfies RedisFailover.Service interface.
 func (c *CRDService) EnsureCRD(conf CRDConf) error {
-	return c.crdCli.EnsurePresent(conf)
+	//return c.crdCli.EnsurePresent(conf)
+	c.logger.Infof("Skip EnsurePresent")
+	return nil
 }
