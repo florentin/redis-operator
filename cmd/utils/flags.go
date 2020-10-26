@@ -12,6 +12,7 @@ import (
 // TODO: improve flags.
 type CMDFlags struct {
 	KubeConfig  string
+	Namespace   string
 	Development bool
 	Debug       bool
 	ListenAddr  string
@@ -23,6 +24,7 @@ func (c *CMDFlags) Init() {
 	kubehome := filepath.Join(homedir.HomeDir(), ".kube", "config")
 	// register flags
 	flag.StringVar(&c.KubeConfig, "kubeconfig", kubehome, "kubernetes configuration path, only used when development mode enabled")
+	flag.StringVar(&c.Namespace, "namespace", "default", "namespace to watch")
 	flag.BoolVar(&c.Development, "development", false, "development flag will allow to run the operator outside a kubernetes cluster")
 	flag.BoolVar(&c.Debug, "debug", false, "enable debug mode")
 	flag.StringVar(&c.ListenAddr, "listen-address", ":9710", "Address to listen on for metrics.")

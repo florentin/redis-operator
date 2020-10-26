@@ -13,15 +13,17 @@ import (
 
 // redisfailoverCRD is the crd redis failover
 type redisfailoverCRD struct {
-	service k8s.Services
-	logger  log.Logger
+	service   k8s.Services
+	logger    log.Logger
+	namespace string
 }
 
-func newRedisFailoverCRD(service k8s.Services, logger log.Logger) *redisfailoverCRD {
+func newRedisFailoverCRD(service k8s.Services, logger log.Logger, namespace string) *redisfailoverCRD {
 	logger = logger.With("crd", "redisfailover")
 	return &redisfailoverCRD{
-		service: service,
-		logger:  logger,
+		service:   service,
+		logger:    logger,
+		namespace: namespace,
 	}
 }
 
@@ -42,10 +44,10 @@ func (w *redisfailoverCRD) Initialize() error {
 func (w *redisfailoverCRD) GetListerWatcher() cache.ListerWatcher {
 	return &cache.ListWatch{
 		ListFunc: func(options metav1.ListOptions) (runtime.Object, error) {
-			return w.service.ListRedisFailovers("", options)
+			return w.service.ListRedisFailovers(w.namespace, options)
 		},
 		WatchFunc: func(options metav1.ListOptions) (watch.Interface, error) {
-			return w.service.WatchRedisFailovers("", options)
+			return w.service.WatchRedisFailovers(w.namespace, options)
 		},
 	}
 }

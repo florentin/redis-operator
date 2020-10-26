@@ -21,11 +21,12 @@ const (
 
 // New will create an operator that is responsible of managing all the required stuff
 // to create redis failovers.
-func New(cfg Config, k8sService k8s.Services, redisClient redis.Client, mClient metrics.Instrumenter, kooperMetricsRecorder kmetrics.Recorder, logger log.Logger) operator.Operator {
+func New(cfg Config, k8sService k8s.Services, redisClient redis.Client, mClient metrics.Instrumenter, kooperMetricsRecorder kmetrics.Recorder, logger log.Logger, namespace string) operator.Operator {
 	logger = logger.With("operator", operatorName)
 
 	// Create our CRDs.
-	watchedCRD := newRedisFailoverCRD(k8sService, logger)
+	logger.Infof("Namespace: %s", namespace)
+	watchedCRD := newRedisFailoverCRD(k8sService, logger, namespace)
 
 	// Create internal services.
 	rfService := rfservice.NewRedisFailoverKubeClient(k8sService, logger)

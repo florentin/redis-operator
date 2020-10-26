@@ -82,7 +82,7 @@ func (m *Main) Run() error {
 	redisClient := redis.New()
 
 	// Create operator and run.
-	redisfailoverOperator := redisfailover.New(m.flags.ToRedisOperatorConfig(), k8sservice, redisClient, metricsServer, kooperMetricsServer, m.logger)
+	redisfailoverOperator := redisfailover.New(m.flags.ToRedisOperatorConfig(), k8sservice, redisClient, metricsServer, kooperMetricsServer, m.logger, m.flags.Namespace)
 	go func() {
 		errC <- redisfailoverOperator.Run(m.stopC)
 	}()
