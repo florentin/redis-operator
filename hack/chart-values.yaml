@@ -1,0 +1,5 @@
+---
+rbac:
+  install: true
+image: florentin/redis-operator
+tag: latest

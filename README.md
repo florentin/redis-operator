@@ -233,13 +233,54 @@ Also, you can check more deeply information on the [docs folder](docs).
 ## EDITS
 Build and run locally with namespace support:
 
+### Single tenant usage
+
+```
+export NS1=redis-operator-1
+export NS2=redis-operator-2
+export OPERATOR=redis-operator-lite
+export VALUES='./hack/chart-values.yaml'
+export CHART='./charts/redisoperator-lite'
+
+make delete-cluster-manifests
+make install-cluster-manifests
+
+alias k=kubectl
+
+# === NS1 ===
+k create ns $NS1
+# this sets the default namespace in KUBECONFIG
+kubectl config set-context $(kubectl config current-context) --namespace=$NS1
+
+# use HELM 3
+helm install $OPERATOR $CHART -f $VALUES
+kubectl apply -f example/redisfailover/basic.yaml
+k get pods
+
+# test single tenancy
+k delete redisfailovers redisfailover
+k get pods # you should see: rfr-redisfailover-0 Terminating
+
+# === NS2 ===
+k create ns $NS2
+kubectl config set-context $(kubectl config current-context) --namespace=$NS2
+
+helm install $OPERATOR $CHART -f $VALUES
+kubectl apply -f example/redisfailover/basic.yaml
+
+k get pods -n $NS2
+k get pods -n $NS1 # NO new pods in NS1, they were created only in NS2
+```
+
+### Local development
 ```
 export CGO_ENABLED=0
 
-make install-crd
+make install-cluster-manifests
 kubectl config set-context $(kubectl config current-context) --namespace=ns-personal-sardan # replace with your own namespace
 make install-example
 # now you should see a "redisfailover.databases.spotahome.com/redisfailover" object in the namespace specified before (i.e. ns-personal-sardan)
 
 go build -ldflags '-extldflags "-static"' -a -v -o bin/darwin/redis-operator ./cmd/redisoperator/
 ./bin/darwin/redis-operator -kubeconfig /Users/sardan/.kube/config -development -debug -namespace ns-personal-sardan
+```

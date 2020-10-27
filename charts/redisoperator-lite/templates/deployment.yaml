@@ -27,6 +27,7 @@ spec:
       containers:
       - name: "{{ .Values.containerName }}"
         image: {{ include "image" . | quote }}
+        args: ["-namespace", "{{.Release.Namespace}}"]
         imagePullPolicy: {{ .Values.pullPolicy }}
         securityContext:
 {{ toYaml .Values.securityContext | indent 10 }}
